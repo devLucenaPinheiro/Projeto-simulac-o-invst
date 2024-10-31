@@ -9,10 +9,25 @@
 <body>
     <script src="script.js"></script>
     <header><h1>Calculadora de investimentos</h1></header>
-    <main><div class="container">
-    <div class="texto"><p>Insira os valores</p></div>
-    <div class="inputs"></div>
-    <div></div>
-    </div></main>
+    <main>
+<div class="container">
+<div class="texto"><p>Insira os valores</p><button onclick="calcularRendimento()">Calcular Lucro</button></div>
+    <div class="inputs">
+        <div>
+        <label for="inicial">Investimento inicial</label>
+        <input type="number" id="inicial" name="inicial" onclick="this.select()" value="0.00" min="0" step="0.01"></div>
+        <div>
+        <label for="mensal">Aportes mensais</label>
+        <input type="number" id="mensal" name="mensal" onclick="this.select()" value="0.00" min="0" step="0.01"></div>
+        <div>
+        <label for="duracao">Periodo de aplicação</label>
+        <input type="number" id="duracao" name="duracao" onclick="this.select()" min="0" value="0">
+        <select id="periodo-unidade" name="periodo-unidade">
+            <option value="meses">Meses</option>
+            <option value="anos">Anos</option>
+        </div>
+    </div>
+</div>
+</main>
 </body>
 </html>

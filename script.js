@@ -1,7 +1,16 @@
-inicial = parseFloat(prompt("Digite o valor inicial"))
-mensal = parseFloat(prompt("Digite o aporte mensal"))
-duraçao = parseFloat(prompt("Digite o periodo (em meses)"))
+function calcularRendimento(){
 
 
+let inicial = parseFloat(document.getElementById('inicial').value)
+let mensal = parseFloat(document.getElementById('mensal').value)
+let duracao = parseFloat(document.getElementById('duracao').value)
+let periodoSelecionado = document.getElementById('periodo-unidade').value
+let selic = 0.1065
 
-    alert("O lucro será de: " + incial + (mensal * duração))
+if(periodoSelecionado === 'anos'){
+    duracao = duracao * 12
+}
+
+let calc = inicial + (mensal * duracao) * (1 + selic)
+    alert("O lucro será de: " + calc.toFixed(2))
+}
