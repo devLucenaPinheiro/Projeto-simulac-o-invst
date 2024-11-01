@@ -10,20 +10,20 @@
     <script src="script.js"></script>
     <header><h1>Calculadora de investimentos</h1></header>
     <main>
-        <div class="container">
-            <div class="texto"><p>Insira os valores</p></div>
+    <div class="container">
+        <div class="texto"><p>Insira os valores</p></div>
             <div class="input-grafico">
                 <div class="inputs">
                     <div class="inputs-1">
-                        <div class="inputs-col">
+                        <div>
                             <label for="inicial">Investimento inicial</label>
                             <input type="number" id="inicial" name="inicial" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
-                        <div class="inputs-col">
+                        <div>
                             <label for="mensal">Aportes mensais</label>
                             <input type="number" id="mensal" name="mensal" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
-                        <div class="inputs-col">
+                        <div>
                             <label for="duracao">Periodo de aplicação</label>
                             <input type="number" id="duracao" name="duracao" onclick="this.select()" min="0" value="0" oninput="calcularRendimento()">
                             <select id="periodo-unidade" name="periodo-unidade" onchange="calcularRendimento()">
@@ -32,23 +32,40 @@
                             </select>
                         </div>
                     </div>
+                    <hr>
                     <div class="inputs-2">
-                        <div class="inputs-col"><label for="selic">Selic efetiva (a.a.)</label>
+                        <div><label for="selic">Selic efetiva (a.a.)</label>
                             <input type="number" id="selic" name="selic" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
-                        <div class="inputs-col"><label for="CDI">CDI (a.a.)</label>
+                        <div><label for="CDI">CDI (a.a.)</label>
                             <input type="number" id="CDI" name="CDI" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
-                        <div class="inputs-col"><label for="ipca">IPCA (a.a.)</label>
+                        <div><label for="ipca">IPCA (a.a.)</label>
                             <input type="number" id="ipca" name="ipca" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
-                        <div class="inputs-col"><label for="tr">TR (a.m.)</label>
+                        <div><label for="tr">TR (a.m.)</label>
                             <input type="number" id="tr" name="tr" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
                     </div>
+                    <div class="inputs-3">
+                        <div class="inputs-3-item"><label for="poupanca">Rentabilidade da Poupança (a.m.)</label>
+                            <input type="number" id="poupanca" name="poupanca" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                        <div class="inputs-3-item" id="CDB"><label for="tesouro-prefix">Rentabilidade do CDB</label>
+                            <input type="number" id="tesouro-prefix" name="tesouro-prefix" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                        <div class="inputs-3-item"><label for="tesouro-ipca">Juro real do Tesouro IPCA+(a.a)</label>
+                            <input type="number" id="tesouro-ipca" name="tesouro-ipca" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                        <div class="inputs-3-item"><label for="">Juro nominal do Tesouro Prefixado (a.a.)</label>
+                            <input type="number" id="" name="" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                        <div class="inputs-3-item"><label for="">Taxa de administração do fundo DI(a.a.)</label>
+                            <input type="number" id="" name="" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                        <div class="inputs-3-item"><label for="">Rentabilidade do Fundo DI(% do CDI)</label>
+                            <input type="number" id="" name="" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                    </div>
                 </div>
-                <div class="grafico"><div class="resultado">
+            <div class="grafico">
+                <div class="resultado">
                     <p>Resultado estimado:</p>
                     <span id="resultado"></span>
-                </div></div>
+                </div>
             </div>
         </div>
+    </div>
     </main>
 </body>
 </html>
