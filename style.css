@@ -32,7 +32,6 @@ main {
 }
 
 .container {
-    background-color: lightcyan;
     width: 100%;
     max-width: 80%;
     display: flex;
@@ -44,7 +43,6 @@ main {
 }
 
 .texto{
-    background-color: lightcoral;
     padding-left: 10vh;
     font-weight: bold;
     font-size: 3vh;
@@ -58,7 +56,6 @@ main {
 
 .inputs{
     padding: 1.5vh;
-    background-color: lightblue;
     flex: 1;
     display: flex;
     align-items: start;
@@ -132,13 +129,12 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #42f54b; 
     color: white;
     font-weight: bold; 
 }
 
 .resultados {
-    background-color: #e0f7fa;
+    background-color: lightcyan;
     padding: 20px;
     font-size: 1.2em;
     font-weight: bold;

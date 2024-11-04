@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de investimentos</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body onload="buscarTaxas()">
-    <script src="script.js"></script>
     <header><h1>Calculadora de investimentos</h1></header>
     <main>
     <div class="container">
@@ -60,13 +61,116 @@
                 <div class="grafico">
                     <div class="resultado">
                         <p>Resultado estimado:</p>
-                        <span id="resultado-selic">Rendimento Selic: </span><br>
-                        <span id="resultado-cdi">Rendimento CDI: </span><br>
-                        <span id="resultado-ipca">Rendimento IPCA: </span><br>
-                        <span id="resultado-tr">Rendimento TR: </span><br>
-                        <span id="resultado-poupanca">Rendimento na poupança: </span><br>
-                    </div>
+                        <canvas id="graficoRendimento" style="width: 300px; height: 300px;"></canvas>
+                    <script>
+let grafico;
+
+async function buscarTaxas() {
+    try {
+        const urls = {
+            selic: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados?formato=json",
+            cdi: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.4389/dados?formato=json",
+            ipca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.11426/dados?formato=json",
+            tesouroIpca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json",
+            tr: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados?formato=json",
+            poupanca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados?formato=json"
+        }
+
+        async function fetchTaxa(url) {
+            const response = await fetch(url)
+            const data = await response.json()
+            const valor = data[data.length - 1]?.valor
+            return parseFloat(valor)
+        }
+
+        const selic = await fetchTaxa(urls.selic)
+        document.getElementById('selic').value = isNaN(selic) ? "N/A" : selic.toFixed(2)
+        const cdi = await fetchTaxa(urls.cdi)
+        document.getElementById('cdi').value = isNaN(cdi) ? "N/A" : cdi.toFixed(2)
+        const ipca = await fetchTaxa(urls.ipca)
+        document.getElementById('ipca').value = isNaN(ipca) ? "N/A" : ipca.toFixed(2)
+        const tesouroIpca = await fetchTaxa(urls.tesouroIpca)
+        document.getElementById('tesouro-ipca').value = isNaN(tesouroIpca) ? "N/A" : tesouroIpca.toFixed(2)
+        const tr = await fetchTaxa(urls.tr)
+        document.getElementById('tr').value = isNaN(tr) ? "N/A" : tr.toFixed(4)
+        const poupanca = await fetchTaxa(urls.poupanca)
+        document.getElementById('poupanca').value = isNaN(poupanca) ? "N/A" : poupanca.toFixed(4)
+        const CDB = 100
+        document.getElementById('CDB').value = isNaN(CDB) ? "N/A" : CDB.toFixed(0)
+        const tesouroPrefix = 5.50
+        document.getElementById('tesouroPrefix').value = isNaN(tesouroPrefix) ? "N/A" : tesouroPrefix.toFixed(2)
+        const admDi = 0.25
+        document.getElementById('admDi').value = isNaN(admDi) ? "N/A" : admDi.toFixed(2)
+        const rentDi = 98.17
+        document.getElementById('rentDi').value = isNaN(rentDi) ? "N/A" : rentDi.toFixed(2)
+
+    } catch (error) {
+        console.error("Erro ao buscar as taxas de juros:", error)
+    }
+}
+
+
+function inicializarGrafico() {
+    const ctx = document.getElementById('graficoRendimento').getContext('2d');
+    grafico = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Taxa Selic', 'CDI', 'IPCA', 'TR', 'Poupança'],
+            datasets: [{
+                label: 'Rendimento Estimado (R$)',
+                data: [0, 0, 0, 0, 0],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function calcularRendimento() {
+            const inicial = parseFloat(document.getElementById('inicial').value) || 0;
+            const mensal = parseFloat(document.getElementById('mensal').value) || 0;
+            let duracao = parseFloat(document.getElementById('duracao').value) || 0;
+            const unidade = document.getElementById('periodo-unidade').value;
+
+            if (unidade === "anos") {
+                duracao *= 12;
+            }
+
+            const selic = parseFloat(document.getElementById('selic').value) / 100 / 12;
+            const cdi = parseFloat(document.getElementById('cdi').value) / 100 / 12;
+            const ipca = parseFloat(document.getElementById('ipca').value) / 100;
+            const tr = parseFloat(document.getElementById('tr').value) / 100;
+            const poupanca = parseFloat(document.getElementById('poupanca').value) / 100;
+
+            const rendimentoSelic = inicial * Math.pow(1 + selic, duracao) + mensal * ((Math.pow(1 + selic, duracao) - 1) / selic);
+            const rendimentoCdi = inicial * Math.pow(1 + cdi, duracao) + mensal * ((Math.pow(1 + cdi, duracao) - 1) / cdi);
+            const rendimentoIpca = inicial * Math.pow(1 + ipca, duracao) + mensal * ((Math.pow(1 + ipca, duracao) - 1) / ipca);
+            const rendimentoTr = inicial * Math.pow(1 + tr, duracao) + mensal * ((Math.pow(1 + tr, duracao) - 1) / tr);
+            const rendimentoPoupanca = inicial * Math.pow(1 + poupanca, duracao) + mensal * ((Math.pow(1 + poupanca, duracao) - 1) / poupanca);
+
+            grafico.data.datasets[0].data = [
+                rendimentoSelic,
+                rendimentoCdi,
+                rendimentoIpca,
+                rendimentoTr,
+                rendimentoPoupanca
+            ];
+            grafico.update();
+        }
+
+        window.onload = function() {
+            buscarTaxas();
+            inicializarGrafico();
+};
+                    </script>
                 </div>
+            </div>
         </div>
     </div>
     </main>
