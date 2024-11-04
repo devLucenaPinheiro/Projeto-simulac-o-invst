@@ -120,7 +120,7 @@ main {
     box-sizing: border-box;
 }
 
-#CDB{
+#CDB-item{
     display: flex;
     flex-direction: column;
 }
