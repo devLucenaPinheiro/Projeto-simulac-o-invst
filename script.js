@@ -12,10 +12,3 @@ function formatarValor(valor) {
     document.getElementById('rendimento-tr').textContent = tr ? `R$ ${calcularParaTaxa(tr * 100)} (a.m.)` : "N/A"
     const poupanca = parseFloat(document.getElementById('poupanca').value)
     document.getElementById('rendimento-poupanca').textContent = poupanca ? `R$ ${calcularParaTaxa(poupanca)}` : "N/A"
-
-    document.getElementById('resultado-selic').textContent = `Rendimento Selic: ${formatarValor(rendimentoSelic)}`
-    document.getElementById('resultado-cdi').textContent = `Rendimento CDI: ${formatarValor(rendimentoCdi)}`
-    document.getElementById('resultado-ipca').textContent = `Rendimento IPCA: ${formatarValor(rendimentoIpca)}`
-    document.getElementById('resultado-tr').textContent = `Rendimento TR: ${formatarValor(rendimentoTr)}`
-    document.getElementById('resultado-poupanca').textContent = `Rendimento na poupança: ${formatarValor(rendimentoPoupanca)}`
-    

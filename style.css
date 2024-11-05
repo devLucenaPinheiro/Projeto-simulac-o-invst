@@ -45,6 +45,15 @@ main {
     width: 100%;
 }
 
+.data-selic,.data-cdi,.data-ipca,.data-tr,.data-poupanca,.data-tesouroIpca{
+    color: #4FA153;
+}
+
+.data-selic:hover,.data-cdi:hover,.data-ipca:hover,.data-tr:hover,.data-poupanca:hover,.data-tesouroIpca:hover{
+    color: #0056b3;
+    text-decoration: underline;
+}
+
 .inputs {
     padding: 1.5vh;
     flex: 1;

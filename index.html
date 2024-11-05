@@ -38,30 +38,35 @@
                         </div>
                     </div>
                     <div class="inputs-2">
-                        <div><label for="selic">Selic efetiva (a.a.)</label>
-                            <input type="number" id="selic" name="selic" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
-                        <div><label for="cdi">CDI (a.a.)</label>
-                            <input type="number" id="cdi" name="cdi" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
-                        <div><label for="ipca">IPCA (a.m.)</label>
-                            <input type="number" id="ipca" name="ipca" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
-                        <div><label for="tr">TR (a.m.)</label>
-                            <input type="number" id="tr" name="tr" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                        <div><label for="selic">Selic efetiva (a.a.) <span class="data-selic">ℹ️</span></label>
+                            <input type="number" id="selic" name="selic" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
+                        </div>
+                        <div><label for="cdi">CDI (a.a.) <span class="data-cdi">ℹ️</span></label>
+                            <input type="number" id="cdi" name="cdi" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
+                        </div>
+                        <div><label for="ipca">IPCA (a.m.) <span class="data-ipca">ℹ️</span></label>
+                            <input type="number" id="ipca" name="ipca" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
+                            <span id="data-ipca" class="data-atualizacao"></span>
+                        </div>
+                        <div><label for="tr">TR (a.m.) <span class="data-tr">ℹ️</span></label>
+                            <input type="number" id="tr" name="tr" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
+                        </div>
                     </div>
                     <div class="inputs-3">
-                        <div class="inputs-3-item"><label for="poupanca">Rentabilidade da Poupança (a.m.)</label>
+                        <div class="inputs-3-item"><label for="poupanca">Rentabilidade da Poupança (a.m.) <span class="data-poupanca">ℹ️</span></label>
                             <input type="number" id="poupanca" name="poupanca" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
                         <div class="inputs-3-item" id="CDB-item"><label for="CDB">Rentabilidade do CDB(% do CDI)</label>
-                            <input type="number" id="CDB" name="CDB" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
-                        <div class="inputs-3-item"><label for="tesouro-ipca">Juro real do Tesouro IPCA+(a.m.)</label>
+                            <input type="number" id="CDB" name="CDB" onclick="this.select()" value="100" min="0" step="1" oninput="calcularRendimento()"></div>
+                        <div class="inputs-3-item"><label for="tesouro-ipca">Juro real do Tesouro IPCA+(a.m.) <span class="data-tesouroIpca">ℹ️</span></label>
                             <input type="number" id="tesouro-ipca" name="tesouro-ipca" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
                         <div class="inputs-3-item"><label for="tesourDrefix">Juro nominal do Tesouro Prefixado (a.a.)</label>
-                            <input type="number" id="tesouroPrefix" name="tesouroPrefix" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                            <input type="number" id="tesouroPrefix" name="tesouroPrefix" onclick="this.select()" value="10.50" min="0" step="1" oninput="calcularRendimento()"></div>
                         <div class="inputs-3-item"><label for="admDi">Taxa de administração do fundo DI(a.a.)</label>
-                            <input type="number" id="admDi" name="admDi" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                            <input type="number" id="admDi" name="admDi" onclick="this.select()" value="0.25" min="0" step="1" oninput="calcularRendimento()"></div>
                         <div class="inputs-3-item"><label for="rentDi">Rentabilidade do Fundo DI(% do CDI)</label>
-                            <input type="number" id="rentDi" name="rentDi" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()"></div>
+                            <input type="number" id="rentDi" name="rentDi" onclick="this.select()" value="100" min="0" step="1" oninput="calcularRendimento()"></div>
                     </div>
-                    <div><p>Estes são os parâmetros padrões aplicados na sua simulação. Você pode ajustá-los e recalcular para uma simulação mais avançada.</p></div>
+                    <div><p>Estes são os parâmetros padrões aplicados na sua simulação. Você pode ajustá-los e recalcular para uma simulação mais avançada. (Todos os valores são fornecidos pela API do Banco Central do Brasil)</p></div>
                 </div>
                 <div class="grafico">
                     <div class="resultado">
@@ -77,36 +82,39 @@ async function buscarTaxas() {
             tesouroIpca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json",
             tr: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados?formato=json",
             poupanca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados?formato=json"
-        }
+        };
 
         async function fetchTaxa(url) {
-            const response = await fetch(url)
-            const data = await response.json()
-            const valor = data[data.length - 1]?.valor
-            return parseFloat(valor)
-        }
+    const response = await fetch(url)
+    const data = await response.json()
+    const valor = data[data.length - 1]?.valor
+    const dataAtualizacao = data[data.length - 1]?.data
+    return { valor: parseFloat(valor), data: dataAtualizacao }
+}
 
         const selic = await fetchTaxa(urls.selic)
-        document.getElementById('selic').value = isNaN(selic) ? "N/A" : selic.toFixed(2)
-        const cdi = await fetchTaxa(urls.cdi)
-        document.getElementById('cdi').value = isNaN(cdi) ? "N/A" : cdi.toFixed(2)
-        const ipca = await fetchTaxa(urls.ipca)
-        document.getElementById('ipca').value = isNaN(ipca) ? "N/A" : ipca.toFixed(2)
-        const tesouroIpca = await fetchTaxa(urls.tesouroIpca)
-        document.getElementById('tesouro-ipca').value = isNaN(tesouroIpca) ? "N/A" : tesouroIpca.toFixed(2)
-        const tr = await fetchTaxa(urls.tr)
-        document.getElementById('tr').value = isNaN(tr) ? "N/A" : tr.toFixed(4)
-        const poupanca = await fetchTaxa(urls.poupanca)
-        document.getElementById('poupanca').value = isNaN(poupanca) ? "N/A" : poupanca.toFixed(4)
-        const CDB = 100
-        document.getElementById('CDB').value = isNaN(CDB) ? "N/A" : CDB.toFixed(0)
-        const tesouroPrefix = 5.50
-        document.getElementById('tesouroPrefix').value = isNaN(tesouroPrefix) ? "N/A" : tesouroPrefix.toFixed(2)
-        const admDi = 0.25
-        document.getElementById('admDi').value = isNaN(admDi) ? "N/A" : admDi.toFixed(2)
-        const rentDi = 98.17
-        document.getElementById('rentDi').value = isNaN(rentDi) ? "N/A" : rentDi.toFixed(2)
+        document.getElementById('selic').value = isNaN(selic.valor) ? "N/A" : selic.valor.toFixed(2)
+        document.querySelector('.data-selic').title = `Atualizado em: ${selic.data}`
 
+        const cdi = await fetchTaxa(urls.cdi)
+        document.getElementById('cdi').value = isNaN(cdi.valor) ? "N/A" : cdi.valor.toFixed(2)
+        document.querySelector('.data-cdi').title = `Atualizado em: ${cdi.data}`
+
+        const ipca = await fetchTaxa(urls.ipca)
+        document.getElementById('ipca').value = isNaN(ipca.valor) ? "N/A" : ipca.valor.toFixed(2)
+        document.querySelector('.data-ipca').title = `Atualizado em: ${ipca.data}`
+
+        const tesouroIpca = await fetchTaxa(urls.tesouroIpca)
+        document.getElementById('tesouro-ipca').value = isNaN(tesouroIpca.valor) ? "N/A" : tesouroIpca.valor.toFixed(2)
+        document.querySelector('.data-tesouroIpca').title = `Atualizado em: ${tesouroIpca.data}`
+
+        const tr = await fetchTaxa(urls.tr)
+        document.getElementById('tr').value = isNaN(tr.valor) ? "N/A" : tr.valor.toFixed(2)
+        document.querySelector('.data-tr').title = `Atualizado em: ${tr.data}`
+
+        const poupanca = await fetchTaxa(urls.poupanca)
+        document.getElementById('poupanca').value = isNaN(poupanca.valor) ? "N/A" : poupanca.valor.toFixed(4)
+        document.querySelector('.data-poupanca').title = `Atualizado em: ${poupanca.data}`
     } catch (error) {
         console.error("Erro ao buscar as taxas de juros:", error)
     }
@@ -117,10 +125,10 @@ function inicializarGrafico() {
 grafico = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Taxa Selic', 'CDI', 'IPCA', 'TR', 'Poupança'],
+        labels: ['Taxa Selic', 'CD'],
         datasets: [{
             label: 'Rendimento Estimado (R$)',
-            data: [0, 0, 0, 0, 0],
+            data: [0, 0, 0, 0, 0, 0, 0],
             borderWidth: 1,
             backgroundColor: '#4FA153',
             borderColor: '#4FA153'
@@ -142,7 +150,7 @@ grafico = new Chart(ctx, {
                 align: 'end',
                 color: '#000',
                 formatter: function formatarValor(valor) {
-    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
                 
             }
@@ -181,6 +189,10 @@ function calcularRendimento() {
     const ipca = parseFloat(document.getElementById('ipca').value) / 100
     const tr = parseFloat(document.getElementById('tr').value) / 100
     const poupanca = parseFloat(document.getElementById('poupanca').value) / 100
+
+    const rentabilidadeCDB = parseFloat(document.getElementById('CDB').value) / 100 / 12 * cdi * 10
+    const rentabilidadeFundoDI = (parseFloat(document.getElementById('rentDi').value) / 100) * cdi
+
     function calcularComImposto(taxa) {
         let montante = inicial * Math.pow(1 + taxa, duracao) + mensal * ((Math.pow(1 + taxa, duracao) - 1) / taxa)
         let lucroBruto = montante - (inicial + mensal * duracao)
@@ -193,22 +205,41 @@ function calcularRendimento() {
     const rendimentoIpca = calcularComImposto(ipca)
     const rendimentoTr = calcularComImposto(tr)
     const rendimentoPoupanca = inicial * Math.pow(1 + poupanca, duracao) + mensal * ((Math.pow(1 + poupanca, duracao) - 1) / poupanca)
+    const rendimentoCDBCalc = calcularComImposto(rentabilidadeCDB)
+    const rendimentoFundoDICalc = calcularComImposto(rentabilidadeFundoDI)
 
     grafico.data.datasets[0].data = [
         rendimentoSelic,
         rendimentoCdi,
         rendimentoIpca,
         rendimentoTr,
-        rendimentoPoupanca
-    ]
-    grafico.update()
+        rendimentoPoupanca,
+        rendimentoCDBCalc,
+        rendimentoFundoDICalc
+    ];
+
+    grafico.data.labels = [
+        'Taxa Selic',
+        'CDI',
+        'IPCA',
+        'TR',
+        'Poupança',
+        'Rentabilidade CDB',
+        'Rentabilidade Fundo DI'
+    ];
+
+    grafico.update();
 
     document.getElementById('resultado-selic').textContent = `Rendimento Selic: ${formatarValor(rendimentoSelic)}`
     document.getElementById('resultado-cdi').textContent = `Rendimento CDI: ${formatarValor(rendimentoCdi)}`
     document.getElementById('resultado-ipca').textContent = `Rendimento IPCA: ${formatarValor(rendimentoIpca)}`
     document.getElementById('resultado-tr').textContent = `Rendimento TR: ${formatarValor(rendimentoTr)}`
     document.getElementById('resultado-poupanca').textContent = `Rendimento na poupança: ${formatarValor(rendimentoPoupanca)}`
+    document.getElementById('resultado-cdb').textContent = `Rendimento CDB: ${formatarValor(rendimentoCDBCalc)}`
+    document.getElementById('resultado-fundo-di').textContent = `Rendimento Fundo DI: ${formatarValor(rendimentoFundoDICalc)}`
 }
+
+
         window.onload = function() {
             buscarTaxas()
             inicializarGrafico()
