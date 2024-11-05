@@ -38,17 +38,17 @@
                         </div>
                     </div>
                     <div class="inputs-2">
-                        <div><label for="selic">Selic efetiva (a.a.) <span class="data-selic">ℹ️</span></label>
+                        <div class="item-input-2"><label for="selic">Selic efetiva (a.a.) <span class="data-selic">ℹ️</span></label>
                             <input type="number" id="selic" name="selic" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
-                        <div><label for="cdi">CDI (a.a.) <span class="data-cdi">ℹ️</span></label>
+                        <div class="item-input-2"><label for="cdi">CDI (a.a.) <span class="data-cdi">ℹ️</span></label>
                             <input type="number" id="cdi" name="cdi" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
-                        </div>
-                        <div><label for="ipca">IPCA (a.m.) <span class="data-ipca">ℹ️</span></label>
+                        </div class="item-input-2">
+                        <div class="item-input-2"><label for="ipca">IPCA (a.m.) <span class="data-ipca">ℹ️</span></label>
                             <input type="number" id="ipca" name="ipca" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                             <span id="data-ipca" class="data-atualizacao"></span>
                         </div>
-                        <div><label for="tr">TR (a.m.) <span class="data-tr">ℹ️</span></label>
+                        <div class="item-input-2"><label for="tr">TR (a.m.) <span class="data-tr">ℹ️</span></label>
                             <input type="number" id="tr" name="tr" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                         <div class="inputs-3-item"><label for="tesourDrefix">Juro nominal do Tesouro Prefixado (a.a.)</label>
                             <input type="number" id="tesouroPrefix" name="tesouroPrefix" onclick="this.select()" value="10.50" min="0" step="1" oninput="calcularRendimento()"></div>
                         <div class="inputs-3-item"><label for="admDi">Taxa de administração do fundo DI(a.a.)</label>
-                            <input type="number" id="admDi" name="admDi" onclick="this.select()" value="0.25" min="0" step="1" oninput="calcularRendimento()"></div>
+                            <input type="number" id="admDi" name="admDi" onclick="this.select()" value="0.25" min="0" step="0.25" oninput="calcularRendimento()"></div>
                         <div class="inputs-3-item"><label for="rentDi">Rentabilidade do Fundo DI(% do CDI)</label>
                             <input type="number" id="rentDi" name="rentDi" onclick="this.select()" value="100" min="0" step="1" oninput="calcularRendimento()"></div>
                     </div>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="grafico">
                     <div class="resultado">
-                        <canvas id="graficoRendimento" style="width: 350px; height: 350px;"></canvas>
+                        <canvas id="graficoRendimento" style="width: 100%; height: 100%;"></canvas>
                     <script>
 let grafico;
 async function buscarTaxas() {
@@ -125,7 +125,7 @@ function inicializarGrafico() {
 grafico = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Taxa Selic', 'CD'],
+        labels: ['Taxa Selic', 'IPCA','TR','Poupança','Rentabilidade CDB','Rentabilidade Fundo Di'],
         datasets: [{
             label: 'Rendimento Estimado (R$)',
             data: [0, 0, 0, 0, 0, 0, 0],
@@ -136,6 +136,8 @@ grafico = new Chart(ctx, {
     },
     options: {
         indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
             x: {
                 beginAtZero: true
@@ -210,7 +212,6 @@ function calcularRendimento() {
 
     grafico.data.datasets[0].data = [
         rendimentoSelic,
-        rendimentoCdi,
         rendimentoIpca,
         rendimentoTr,
         rendimentoPoupanca,
@@ -220,7 +221,6 @@ function calcularRendimento() {
 
     grafico.data.labels = [
         'Taxa Selic',
-        'CDI',
         'IPCA',
         'TR',
         'Poupança',
