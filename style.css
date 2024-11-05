@@ -162,23 +162,24 @@ main {
 
     .inputs-2{
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 0.8vh;
+    }
+    .item-input-2{
+        padding: 10px;
+        flex: 1 1 45%;
     }
 }
 
-@media (max-width: 480px) {
-    .header{
-        justify-items: center;
-        align-items: center;
-    }
-    
+@media (max-width: 480px) {    
     .texto {
         padding-left: 5vh;
         font-size: 2.5vh;
     }
     .inputs-1{
+        display: flex;
         flex-direction: column;
-        gap: 1vh;
+        gap: 5vh;
     }
     inputs-2{
         flex-direction: column;

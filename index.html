@@ -125,7 +125,7 @@ function inicializarGrafico() {
 grafico = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Taxa Selic', 'IPCA','TR','Poupança','Rentabilidade CDB','Rentabilidade Fundo Di'],
+        labels: ['Tesouro Selic','Tesouro IPCA','Poupança','Rentabilidade CDB','Rentabilidade Fundo Di'],
         datasets: [{
             label: 'Rendimento Estimado (R$)',
             data: [0, 0, 0, 0, 0, 0, 0],
@@ -188,12 +188,13 @@ function calcularRendimento() {
 
     const selic = parseFloat(document.getElementById('selic').value) / 100 / 12
     const cdi = parseFloat(document.getElementById('cdi').value) / 100 / 12
-    const ipca = parseFloat(document.getElementById('ipca').value) / 100
     const tr = parseFloat(document.getElementById('tr').value) / 100
     const poupanca = parseFloat(document.getElementById('poupanca').value) / 100
-
     const rentabilidadeCDB = parseFloat(document.getElementById('CDB').value) / 100 / 12 * cdi * 10
     const rentabilidadeFundoDI = (parseFloat(document.getElementById('rentDi').value) / 100) * cdi
+
+    const tesouroIpca = parseFloat(document.getElementById('tesouro-ipca').value) / 100
+    const rendimentoTesouroIpca = inicial * Math.pow(1 + tesouroIpca, duracao) + mensal * ((Math.pow(1 + tesouroIpca, duracao) - 1) / tesouroIpca)
 
     function calcularComImposto(taxa) {
         let montante = inicial * Math.pow(1 + taxa, duracao) + mensal * ((Math.pow(1 + taxa, duracao) - 1) / taxa)
@@ -204,7 +205,6 @@ function calcularRendimento() {
 
     const rendimentoSelic = calcularComImposto(selic)
     const rendimentoCdi = calcularComImposto(cdi)
-    const rendimentoIpca = calcularComImposto(ipca)
     const rendimentoTr = calcularComImposto(tr)
     const rendimentoPoupanca = inicial * Math.pow(1 + poupanca, duracao) + mensal * ((Math.pow(1 + poupanca, duracao) - 1) / poupanca)
     const rendimentoCDBCalc = calcularComImposto(rentabilidadeCDB)
@@ -212,17 +212,15 @@ function calcularRendimento() {
 
     grafico.data.datasets[0].data = [
         rendimentoSelic,
-        rendimentoIpca,
-        rendimentoTr,
+        rendimentoTesouroIpca,
         rendimentoPoupanca,
         rendimentoCDBCalc,
         rendimentoFundoDICalc
     ];
 
     grafico.data.labels = [
-        'Taxa Selic',
-        'IPCA',
-        'TR',
+        'Tesouro Selic',
+        'Tesouro IPCA',
         'Poupança',
         'Rentabilidade CDB',
         'Rentabilidade Fundo DI'
@@ -232,7 +230,7 @@ function calcularRendimento() {
 
     document.getElementById('resultado-selic').textContent = `Rendimento Selic: ${formatarValor(rendimentoSelic)}`
     document.getElementById('resultado-cdi').textContent = `Rendimento CDI: ${formatarValor(rendimentoCdi)}`
-    document.getElementById('resultado-ipca').textContent = `Rendimento IPCA: ${formatarValor(rendimentoIpca)}`
+    document.getElementById('resultado-tesouro-ipca').textContent = `Rendimento Tesouro IPCA: ${formatarValor(rendimentoTesouroIpca)}`
     document.getElementById('resultado-tr').textContent = `Rendimento TR: ${formatarValor(rendimentoTr)}`
     document.getElementById('resultado-poupanca').textContent = `Rendimento na poupança: ${formatarValor(rendimentoPoupanca)}`
     document.getElementById('resultado-cdb').textContent = `Rendimento CDB: ${formatarValor(rendimentoCDBCalc)}`
