@@ -18,8 +18,4 @@ function formatarValor(valor) {
     document.getElementById('resultado-ipca').textContent = `Rendimento IPCA: ${formatarValor(rendimentoIpca)}`
     document.getElementById('resultado-tr').textContent = `Rendimento TR: ${formatarValor(rendimentoTr)}`
     document.getElementById('resultado-poupanca').textContent = `Rendimento na poupança: ${formatarValor(rendimentoPoupanca)}`
-
-
-
-
     

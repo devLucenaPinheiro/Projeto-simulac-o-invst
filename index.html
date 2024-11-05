@@ -113,7 +113,7 @@ async function buscarTaxas() {
 }
 
 function inicializarGrafico() {
-    const ctx = document.getElementById('graficoRendimento').getContext('2d');
+    const ctx = document.getElementById('graficoRendimento').getContext('2d')
 grafico = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -142,7 +142,7 @@ grafico = new Chart(ctx, {
                 align: 'end',
                 color: '#000',
                 formatter: function formatarValor(valor) {
-    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
                 
             }
@@ -152,42 +152,67 @@ grafico = new Chart(ctx, {
 })
 }
 
+function calcularImpostoRenda(lucro, duracaoMeses) {
+    let taxaIR
+    if (duracaoMeses <= 6) {
+        taxaIR = 0.225
+    } else if (duracaoMeses <= 12) {
+        taxaIR = 0.20
+    } else if (duracaoMeses <= 24) {
+        taxaIR = 0.175
+    } else {
+        taxaIR = 0.15
+    }
+    return lucro * taxaIR
+}
+
 function calcularRendimento() {
-            const inicial = parseFloat(document.getElementById('inicial').value) || 0
-            const mensal = parseFloat(document.getElementById('mensal').value) || 0
-            let duracao = parseFloat(document.getElementById('duracao').value) || 0
-            const unidade = document.getElementById('periodo-unidade').value
+    const inicial = parseFloat(document.getElementById('inicial').value) || 0
+    const mensal = parseFloat(document.getElementById('mensal').value) || 0
+    let duracao = parseFloat(document.getElementById('duracao').value) || 0
+    const unidade = document.getElementById('periodo-unidade').value
 
-            if (unidade === "anos") {
-                duracao *= 12
-            }
+    if (unidade === "anos") {
+        duracao *= 12
+    }
 
-            const selic = parseFloat(document.getElementById('selic').value) / 100 / 12
-            const cdi = parseFloat(document.getElementById('cdi').value) / 100 / 12
-            const ipca = parseFloat(document.getElementById('ipca').value) / 100
-            const tr = parseFloat(document.getElementById('tr').value) / 100
-            const poupanca = parseFloat(document.getElementById('poupanca').value) / 100
+    const selic = parseFloat(document.getElementById('selic').value) / 100 / 12
+    const cdi = parseFloat(document.getElementById('cdi').value) / 100 / 12
+    const ipca = parseFloat(document.getElementById('ipca').value) / 100
+    const tr = parseFloat(document.getElementById('tr').value) / 100
+    const poupanca = parseFloat(document.getElementById('poupanca').value) / 100
+    function calcularComImposto(taxa) {
+        let montante = inicial * Math.pow(1 + taxa, duracao) + mensal * ((Math.pow(1 + taxa, duracao) - 1) / taxa)
+        let lucroBruto = montante - (inicial + mensal * duracao)
+        let ir = calcularImpostoRenda(lucroBruto, duracao)
+        return montante - ir
+    }
 
-            const rendimentoSelic = inicial * Math.pow(1 + selic, duracao) + mensal * ((Math.pow(1 + selic, duracao) - 1) / selic)
-            const rendimentoCdi = inicial * Math.pow(1 + cdi, duracao) + mensal * ((Math.pow(1 + cdi, duracao) - 1) / cdi)
-            const rendimentoIpca = inicial * Math.pow(1 + ipca, duracao) + mensal * ((Math.pow(1 + ipca, duracao) - 1) / ipca)
-            const rendimentoTr = inicial * Math.pow(1 + tr, duracao) + mensal * ((Math.pow(1 + tr, duracao) - 1) / tr)
-            const rendimentoPoupanca = inicial * Math.pow(1 + poupanca, duracao) + mensal * ((Math.pow(1 + poupanca, duracao) - 1) / poupanca)
+    const rendimentoSelic = calcularComImposto(selic)
+    const rendimentoCdi = calcularComImposto(cdi)
+    const rendimentoIpca = calcularComImposto(ipca)
+    const rendimentoTr = calcularComImposto(tr)
+    const rendimentoPoupanca = inicial * Math.pow(1 + poupanca, duracao) + mensal * ((Math.pow(1 + poupanca, duracao) - 1) / poupanca)
 
-            grafico.data.datasets[0].data = [
-                rendimentoSelic,
-                rendimentoCdi,
-                rendimentoIpca,
-                rendimentoTr,
-                rendimentoPoupanca
-            ]
-            grafico.update()
-        }
+    grafico.data.datasets[0].data = [
+        rendimentoSelic,
+        rendimentoCdi,
+        rendimentoIpca,
+        rendimentoTr,
+        rendimentoPoupanca
+    ]
+    grafico.update()
 
+    document.getElementById('resultado-selic').textContent = `Rendimento Selic: ${formatarValor(rendimentoSelic)}`
+    document.getElementById('resultado-cdi').textContent = `Rendimento CDI: ${formatarValor(rendimentoCdi)}`
+    document.getElementById('resultado-ipca').textContent = `Rendimento IPCA: ${formatarValor(rendimentoIpca)}`
+    document.getElementById('resultado-tr').textContent = `Rendimento TR: ${formatarValor(rendimentoTr)}`
+    document.getElementById('resultado-poupanca').textContent = `Rendimento na poupança: ${formatarValor(rendimentoPoupanca)}`
+}
         window.onload = function() {
             buscarTaxas()
             inicializarGrafico()
-};
+}
                     </script>
                 </div>
             </div>
