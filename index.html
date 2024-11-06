@@ -109,7 +109,7 @@ async function buscarTaxas() {
         document.querySelector('.data-tesouroIpca').title = `Atualizado em: ${tesouroIpca.data}`
 
         const tr = await fetchTaxa(urls.tr)
-        document.getElementById('tr').value = isNaN(tr.valor) ? "N/A" : tr.valor.toFixed(2)
+        document.getElementById('tr').value = isNaN(tr.valor) ? "N/A" : tr.valor.toFixed(4)
         document.querySelector('.data-tr').title = `Atualizado em: ${tr.data}`
 
         const poupanca = await fetchTaxa(urls.poupanca)
@@ -125,10 +125,10 @@ function inicializarGrafico() {
 grafico = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Tesouro Selic','Tesouro IPCA','Poupança','Rentabilidade CDB','Rentabilidade Fundo Di'],
+        labels: ['Tesouro Selic','Tesouro IPCA','Poupança','Rentabilidade CDB','Rentabilidade Fundo Di', 'Tesouro prefixado'],
         datasets: [{
             label: 'Rendimento Estimado (R$)',
-            data: [0, 0, 0, 0, 0, 0, 0],
+            data: [0, 0, 0, 0, 0, 0],
             borderWidth: 1,
             backgroundColor: '#4FA153',
             borderColor: '#4FA153'
@@ -162,18 +162,31 @@ grafico = new Chart(ctx, {
 })
 }
 
-function calcularImpostoRenda(lucro, duracaoMeses) {
-    let taxaIR
-    if (duracaoMeses <= 6) {
-        taxaIR = 0.225
-    } else if (duracaoMeses <= 12) {
-        taxaIR = 0.20
-    } else if (duracaoMeses <= 24) {
-        taxaIR = 0.175
-    } else {
-        taxaIR = 0.15
+function calcularImpostoRenda(lucro, meses) {
+        let taxaIR;
+        if (meses <= 6) {
+            taxaIR = 0.225;
+        } else if (meses <= 12) {
+            taxaIR = 0.2
+        } else if (meses <= 24) {
+            taxaIR = 0.175
+        } else {
+            taxaIR = 0.15
+        }
+        return lucro * taxaIR
     }
-    return lucro * taxaIR
+
+    function calcularTesouroPrefixado(inicial, mensal, duracao, taxaPrefixada) {
+    const taxaMensal = Math.pow(1 + taxaPrefixada, 1 / 12) - 1
+
+    const montanteInicial = inicial * Math.pow(1 + taxaMensal, duracao)
+    const montanteAportes = mensal * ((Math.pow(1 + taxaMensal, duracao) - 1) / taxaMensal)
+
+    const montanteTotal = montanteInicial + montanteAportes
+    const lucroBruto = montanteTotal - (inicial + mensal * duracao)
+
+    const imposto = calcularImpostoRenda(lucroBruto, duracao)
+    return montanteTotal - imposto
 }
 
 function calcularRendimento() {
@@ -189,33 +202,37 @@ function calcularRendimento() {
     const selic = parseFloat(document.getElementById('selic').value) / 100 / 12
     const cdi = parseFloat(document.getElementById('cdi').value) / 100 / 12
     const tr = parseFloat(document.getElementById('tr').value) / 100
+    const ipca = parseFloat(document.getElementById('ipca').value) / 100;
     const poupanca = parseFloat(document.getElementById('poupanca').value) / 100
     const rentabilidadeCDB = parseFloat(document.getElementById('CDB').value) / 100 / 12 * cdi * 10
     const rentabilidadeFundoDI = (parseFloat(document.getElementById('rentDi').value) / 100) * cdi
-
+    const taxaAdmFundoDI = parseFloat(document.getElementById('admDi').value) / 100
     const tesouroIpca = parseFloat(document.getElementById('tesouro-ipca').value) / 100
-    const rendimentoTesouroIpca = inicial * Math.pow(1 + tesouroIpca, duracao) + mensal * ((Math.pow(1 + tesouroIpca, duracao) - 1) / tesouroIpca)
-
-    function calcularComImposto(taxa) {
-        let montante = inicial * Math.pow(1 + taxa, duracao) + mensal * ((Math.pow(1 + taxa, duracao) - 1) / taxa)
-        let lucroBruto = montante - (inicial + mensal * duracao)
-        let ir = calcularImpostoRenda(lucroBruto, duracao)
-        return montante - ir
+    const rendimentoTesouroIpca = inicial * Math.pow(1 + (tesouroIpca + ipca + tr), duracao) + mensal * ((Math.pow(1 + (tesouroIpca + ipca + tr), duracao) - 1) / (tesouroIpca + ipca + tr))
+    const taxaPrefixada = parseFloat(document.getElementById('tesouroPrefix').value) / 100
+    const rendimentoTesouroPrefixado = calcularTesouroPrefixado(inicial, mensal, duracao, taxaPrefixada)
+    
+    function calcularComImposto(taxa, taxaAdmin = 0) {
+        const taxaEfetiva = taxa - taxaAdmin
+        const montante = inicial * Math.pow(1 + taxaEfetiva, duracao) + mensal * ((Math.pow(1 + taxaEfetiva, duracao) - 1) / taxaEfetiva)
+        const lucroBruto = montante - (inicial + mensal * duracao)
+        const imposto = calcularImpostoRenda(lucroBruto, duracao)
+        return montante - imposto
     }
 
     const rendimentoSelic = calcularComImposto(selic)
     const rendimentoCdi = calcularComImposto(cdi)
-    const rendimentoTr = calcularComImposto(tr)
     const rendimentoPoupanca = inicial * Math.pow(1 + poupanca, duracao) + mensal * ((Math.pow(1 + poupanca, duracao) - 1) / poupanca)
     const rendimentoCDBCalc = calcularComImposto(rentabilidadeCDB)
-    const rendimentoFundoDICalc = calcularComImposto(rentabilidadeFundoDI)
+    const rendimentoFundoDICalc = calcularComImposto(rentabilidadeFundoDI, taxaAdmFundoDI)
 
     grafico.data.datasets[0].data = [
         rendimentoSelic,
         rendimentoTesouroIpca,
         rendimentoPoupanca,
         rendimentoCDBCalc,
-        rendimentoFundoDICalc
+        rendimentoFundoDICalc,
+        rendimentoTesouroPrefixado
     ];
 
     grafico.data.labels = [
@@ -223,18 +240,18 @@ function calcularRendimento() {
         'Tesouro IPCA',
         'Poupança',
         'Rentabilidade CDB',
-        'Rentabilidade Fundo DI'
+        'Rentabilidade Fundo DI',
+        'Tesouro Prefixado'
     ];
 
     grafico.update();
 
     document.getElementById('resultado-selic').textContent = `Rendimento Selic: ${formatarValor(rendimentoSelic)}`
-    document.getElementById('resultado-cdi').textContent = `Rendimento CDI: ${formatarValor(rendimentoCdi)}`
     document.getElementById('resultado-tesouro-ipca').textContent = `Rendimento Tesouro IPCA: ${formatarValor(rendimentoTesouroIpca)}`
-    document.getElementById('resultado-tr').textContent = `Rendimento TR: ${formatarValor(rendimentoTr)}`
     document.getElementById('resultado-poupanca').textContent = `Rendimento na poupança: ${formatarValor(rendimentoPoupanca)}`
     document.getElementById('resultado-cdb').textContent = `Rendimento CDB: ${formatarValor(rendimentoCDBCalc)}`
     document.getElementById('resultado-fundo-di').textContent = `Rendimento Fundo DI: ${formatarValor(rendimentoFundoDICalc)}`
+    document.getElementById('resultado-tesouro-prefixado').textContent = `Rendimento Tesouro Prefixado: ${formatarValor(rendimentoTesouroPrefixado)}`
 }
 
 
