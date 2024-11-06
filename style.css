@@ -133,6 +133,12 @@ main {
     }
 }
 
+@media(max-width:1080px){
+    .inputs-2{
+        flex-wrap: wrap;
+    }
+}
+
 @media (max-width: 768px) {
     header {
         height: 12vh;
@@ -162,6 +168,11 @@ main {
         order: 2;
     }
 
+    .inputs-1{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
     .inputs-2{
         display: flex;
         flex-wrap: wrap;
