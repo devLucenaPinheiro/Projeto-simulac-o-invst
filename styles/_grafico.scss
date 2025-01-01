@@ -1,0 +1,13 @@
+.grafico {
+    width: 100%;
+    height: 100%;
+    @include FlexCenter();
+}
+
+.resultado{
+    background-color: rgb(248, 248, 248);
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+}

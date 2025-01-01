@@ -1,0 +1,59 @@
+.input-grafico {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.inputs {
+    padding: 1.5vh;
+    flex: 1;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1.5vh;
+}
+
+.inputs-1, .inputs-2 {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5vh;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.inputs-1,.inputs-2{
+    &input{
+    padding: 0.5vh;
+    font-size: 17px;
+    border: 2px solid #000000;
+    }
+}
+
+.inputs-3 {
+    @include FlexCenter();
+    flex-wrap: wrap;
+    gap: 0.8vh;
+}
+
+.inputs-3-item {
+    flex: 1 1 45%;
+    min-width: 45%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.inputs-3-item input{
+    width: 100%; 
+    height: 40px;
+    font-size: 16px;
+    padding: 8px;
+    border: 2px solid;
+    box-sizing: border-box;
+}
+
+#CDB-item {
+    display: flex;
+    flex-direction: column;
+}
