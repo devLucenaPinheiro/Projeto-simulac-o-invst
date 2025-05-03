@@ -78,12 +78,12 @@ let grafico;
 async function buscarTaxas() {
     try {
         const urls = {
-            selic: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados?formato=json",
-            cdi: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.4389/dados?formato=json",
+            selic: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?formato=json&dataInicial=01/01/2024&dataFinal=31/12/2033",
+            cdi: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?formato=json&dataInicial=01/01/2024&dataFinal=31/12/2033",
             ipca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.11426/dados?formato=json",
             tesouroIpca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json",
-            tr: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados?formato=json",
-            poupanca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados?formato=json"
+            tr: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados?formato=json&dataInicial=01/01/2024&dataFinal=31/12/2033",
+            poupanca: "https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados?formato=json&dataInicial=01/01/2024&dataFinal=31/12/2033"
         };
 
         async function fetchTaxa(url) {
