@@ -13,32 +13,34 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300&family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body onload="buscarTaxas()">
-    <header><h1>Calculadora de investimentos</h1></header>
+    <header><h1 style="padding: 30px 1px;">Calculadora de investimentos</h1></header>
     <main>
     <div class="container">
         <div class="texto"><p>Insira os valores</p></div>
             <div class="input-grafico">
                 <div class="inputs">
                     <div class="inputs-1">
-                        <div>
+                        <div class="item-input-1">
                             <label for="inicial">Investimento inicial</label>
                             <input type="number" id="inicial" name="inicial" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
-                        <div>
+                        <div class="item-input-1">
                             <label for="mensal">Aportes mensais</label>
                             <input type="number" id="mensal" name="mensal" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
-                        <div>
+                        <div class="item-input-1">
                             <label for="duracao">Periodo de aplicação</label>
-                            <input type="number" id="duracao" name="duracao" onclick="this.select()" min="0" value="0" oninput="calcularRendimento()">
-                            <select id="periodo-unidade" name="periodo-unidade" onchange="calcularRendimento()">
-                                <option value="meses">Meses</option>
-                                <option value="anos">Anos</option>
-                            </select>
+                            <div id="aplicação">
+                                <input type="number" id="duracao" name="duracao" onclick="this.select()" min="0" value="0" oninput="calcularRendimento()">
+                                <select id="periodo-unidade" name="periodo-unidade" onchange="calcularRendimento()">
+                                    <option value="meses">Meses</option>
+                                    <option value="anos">Anos</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="inputs-2">
-                        <div class="item-input-2"><label for="selic">Selic efetiva (a.a.) <span class="data-selic">ℹ️</span></label>
+                        <div class="item-input-2"><label for="selic" class="selic-label">Selic efetiva (a.a.) <span class="data-selic">ℹ️</span></label>
                             <input type="number" id="selic" name="selic" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
                         <div class="item-input-2"><label for="cdi">CDI (a.a.) <span class="data-cdi">ℹ️</span></label>

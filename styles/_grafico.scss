@@ -1,7 +1,10 @@
 .grafico {
-    width: 100%;
+    width: 40%;
     height: 100%;
-    @include FlexCenter();
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5vh;
 }
 
 .resultado{
