@@ -49,6 +49,12 @@ header {
   gap: 1.5vh;
   width: 100%;
 }
+.inputs-1 .menor {
+  flex: 1 1 30%;
+}
+.inputs-1 .maior {
+  flex: 2 1 40%;
+}
 
 #aplicação {
   display: flex;
@@ -105,7 +111,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.8vh;
+  gap: 1.5vh;
 }
 
 .inputs-3-item {

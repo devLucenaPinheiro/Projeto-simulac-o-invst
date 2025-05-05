@@ -20,25 +20,25 @@
             <div class="input-grafico">
                 <div class="inputs">
                     <div class="inputs-1">
-                        <div class="item-input-1">
-                            <label for="inicial">Investimento inicial</label>
-                            <input type="number" id="inicial" name="inicial" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
+                        <div class="item-input-1 menor">
+                          <label for="inicial">Investimento inicial</label>
+                          <input type="number" id="inicial" name="inicial" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
-                        <div class="item-input-1">
-                            <label for="mensal">Aportes mensais</label>
-                            <input type="number" id="mensal" name="mensal" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
+                        <div class="item-input-1 menor">
+                          <label for="mensal">Aportes mensais</label>
+                          <input type="number" id="mensal" name="mensal" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
                         </div>
-                        <div class="item-input-1">
-                            <label for="duracao">Periodo de aplicação</label>
-                            <div id="aplicação">
-                                <input type="number" id="duracao" name="duracao" onclick="this.select()" min="0" value="0" oninput="calcularRendimento()">
-                                <select id="periodo-unidade" name="periodo-unidade" onchange="calcularRendimento()">
-                                    <option value="meses">Meses</option>
-                                    <option value="anos">Anos</option>
-                                </select>
-                            </div>
+                        <div class="item-input-1 maior">
+                          <label for="duracao">Período de aplicação</label>
+                          <div id="aplicação">
+                            <input type="number" id="duracao" name="duracao" onclick="this.select()" min="0" value="0" oninput="calcularRendimento()">
+                            <select id="periodo-unidade" name="periodo-unidade" onchange="calcularRendimento()">
+                              <option value="meses">Meses</option>
+                              <option value="anos">Anos</option>
+                            </select>
+                          </div>
                         </div>
-                    </div>
+                      </div>
                     <div class="inputs-2">
                         <div class="item-input-2"><label for="selic" class="selic-label">Selic efetiva (a.a.) <span class="data-selic">ℹ️</span></label>
                             <input type="number" id="selic" name="selic" onclick="this.select()" value="0.00" min="0" step="1" oninput="calcularRendimento()">
